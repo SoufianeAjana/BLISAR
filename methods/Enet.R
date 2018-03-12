@@ -96,7 +96,7 @@ result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
 for(l in 1:nb_iterations){
                         vec_list_var = c(vec_list_var,result_sampling[[l]]$Var_name)
                         vec_nb_var = c(vec_nb_var,result_sampling[[l]]$Nb_var)
-                        index = cbind(index,c(round(result_sampling[[l]]$MSEP,2),round(result_sampling[[l]]$R2,2)))
+                        index = cbind(index,c(round(result_sampling[[l]]$RMSEP,2),round(result_sampling[[l]]$R2,2)))
                         }
   
 table_index = as.data.frame(index)
