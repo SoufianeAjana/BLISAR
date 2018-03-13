@@ -77,7 +77,7 @@ result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
                   RMSEP =  sqrt(mean(MSEP.vec))
                   R2 = cor(database[,1],Ypred)^2
                   
-                  return(list(MSEP=MSEP,R2=R2,Nb_var=nb_var_vec,Num_ind=folds,Var_name=name_var))
+                  return(list(RMSEP=RMSEP,R2=R2,Nb_var=nb_var_vec,Num_ind=folds,Var_name=name_var))
                   
                                 }
   
