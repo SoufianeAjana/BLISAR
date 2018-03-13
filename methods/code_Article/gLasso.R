@@ -51,7 +51,7 @@ result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
                             
                             #Training the model to obtain the best tuning parameters
                             dataset = list(x=x.train,y=y.train)
-                            grp = c(rep(1,length(grep("_EC", colnames(database)))),rep(2,length(grep("_PC", colnames(database)))),rep(3,length(grep("_pl", colnames(database)))),rep(4,length(grep("_GR",                             colnames(database)))),rep(5,length(grep("_lcms", colnames(database)))))
+                            grp = c(rep(1,length(grep("_EC", colnames(database)))),rep(2,length(grep("_PC", colnames(database)))),rep(3,length(grep("_pl", colnames(database)))),rep(4,length(grep("_GR", colnames(database)))),rep(5,length(grep("_lcms", colnames(database)))))
                             glasso_cv = cvSGL(data=dataset,index=grp,type="linear",alpha=0,nfold=n)
                             idx =  which.min(glasso_cv$lldiff)
                             
