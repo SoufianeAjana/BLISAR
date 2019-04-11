@@ -32,6 +32,8 @@ result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
                 library(R.utils)
                     
                 #Initialization
+                nb_var_vec = c()
+                name_var = c()
                 alpha_vec = c()
                 M=10
                 n = nrow(database)
