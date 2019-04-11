@@ -1,14 +1,19 @@
 
-#This script is used for running parallelized calculations of sPLS regression model
+#This script is used for running parallelized calculations of sgPLS regression model
 
 ##################################################################
 #             Fonction Main resampling                           #
 ##################################################################
 
+#Important: First, the database should be shaped according to the sgPLS package recommendations, i.e. take into account the grouping structure of your database and transform it to a matrix !
+
 resampling_function = function(database,nb_iterations){
+
+set.seed(1)  #We fix a seed for reproducibility matters
   
-library(foreach)                
-library(doParallel)             
+library(foreach)
+library(doParallel)
+library(doRNG)             
   
 #Initialization
 vec_list_var = c()
@@ -21,24 +26,21 @@ registerDoParallel(cl, cores = detectCores())
 #  Repeated double cross-validation function : result_sampling 
 #################################################################
   
-result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
-    
-                set.seed(i+7)
+result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
+
                 library(sgPLS)
                 library(R.utils)
                 
                 #Initialization
-                MSEP_vec = c()
-                R2_vec = c()
                 nb_var_vec = c()
                 name_var = c()
-                M=10
-                n = nrow(database)
+                M=10 #number of folds to perform
+                n = nrow(database) 
                 MSEP.vec = Ypred =  rep(0,n)
-                folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples : sert à calculer l'erreur de prédiction moyenne au sein d'un même échantillon
-                grid.gX = 1:5
-                ind.block.x = c(32,73,121,168)
-                grid.alpha.X = seq(0.05,0.95,by=0.1)
+                folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples
+                grid.gX = 1:5 # Vector of integers specifying the number of groups in the dataset
+                ind.block.x = c(32,73,121,168) #This is an example of a vector of integers describing the grouping of the X variables (c.f. the R package sgPLS)
+                grid.alpha.X = seq(0.05,0.95,by=0.1) #A vector of values for the trade of between the L1 and L2 norms
                 
                 #Begin outerloop
                 for(j in 1:M){
