@@ -32,6 +32,8 @@ result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
                   library(glmnet)  # Package to fit lasso/elastic net models
                   
                   #Initialization
+                  nb_var_vec = c()
+                  name_var = c()
                   MSEP.vec = Ypred =  rep(0,nrow(database))
                   M=10
                   n = nrow(database)
