@@ -2,40 +2,42 @@
 #This script is used for running parallelized calculations of Lasso regression model
 
 ##################################################################
-#                      Main Function                             #
+#             Fonction Main resampling                           #
 ##################################################################
+
+#Important: First, the database should be shaped according to the sgPLS package recommendations, i.e. take into account the grouping structure of your database and transform it to a matrix !
 
 resampling_function = function(database,nb_iterations){
 
-library(foreach)                
-library(doParallel)             
-
+set.seed(1)  #We fix a seed for reproducibility matters
+  
+library(foreach)
+library(doParallel)
+library(doRNG)             
+  
 #Initialization
 vec_list_var = c()
 vec_nb_var = c()
 index = c()
 cl = makeCluster(detectCores())                    
 registerDoParallel(cl, cores = detectCores())       
-
+  
 #################################################################
-#   Repeated double cross-validation function : result_sampling                                        
+#  Repeated double cross-validation function : result_sampling 
 #################################################################
-
-result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
-
-                  set.seed(i+7)
+  
+result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
+  
                   library(R.utils)
                   library(glmnet)  # Package to fit lasso/elastic net models
                   
                   #Initialization
-                  MSEP_vec = c()
-                  R2_vec = c()
                   nb_var_vec = c()
                   name_var = c()
                   MSEP.vec = Ypred =  rep(0,nrow(database))
                   M=10
                   n = nrow(database)
-                  folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples : sert à calculer l'erreur de prédiction moyenne au sein d'un même échantillon
+                  folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples : sert Ã  calculer l'erreur de prÃ©diction moyenne au sein d'un mÃªme Ã©chantillon
                   
                   #Begin outerloop
                   for(j in 1:M){
