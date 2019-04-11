@@ -29,7 +29,8 @@ result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
   
                 library(SGL) 
                 library(R.utils)
-
+  
+                #Initialization
                 nb_var_vec = c()
                 name_var = c()
                 M=10
