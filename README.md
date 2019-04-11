@@ -8,4 +8,5 @@
 - package foreach
 - package doParallel
 - package ggplot2
+- package doRNG
 
