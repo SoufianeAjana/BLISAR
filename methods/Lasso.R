@@ -37,7 +37,7 @@ result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
                   MSEP.vec = Ypred =  rep(0,nrow(database))
                   M=10
                   n = nrow(database)
-                  folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples : sert à calculer l'erreur de prédiction moyenne au sein d'un même échantillon
+                  folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples 
                   
                   #Begin outerloop
                   for(j in 1:M){
