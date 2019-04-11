@@ -1,5 +1,5 @@
 
-#This script is used for running parallelized calculations of sPLS regression model
+#This script is used for running parallelized calculations of Elastic net regression model
 
 ##################################################################
 #             Fonction Main resampling                           #
