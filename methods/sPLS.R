@@ -5,34 +5,34 @@
 #             Fonction Main resampling                           #
 ##################################################################
 
+#Important: First, the database should be shaped according to the sgPLS package recommendations, i.e. take into account the grouping structure of your database and transform it to a matrix !
+
 resampling_function = function(database,nb_iterations){
+
+set.seed(1)  #We fix a seed for reproducibility matters
   
-library(foreach)               
-library(doParallel)            
-  
+library(foreach)
+library(doParallel)
+library(doRNG)             
   
 #Initialization
 vec_list_var = c()
 vec_nb_var = c()
 index = c()
-Ypred_mat = c()
 cl = makeCluster(detectCores())                    
-registerDoParallel(cl, cores = detectCores())    
+registerDoParallel(cl, cores = detectCores())       
   
 #################################################################
-#  Repeated double cross-validation function : result_sampling    
+#  Repeated double cross-validation function : result_sampling 
 #################################################################
   
-result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
-    
-                set.seed(i+7)
+result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
+
                 library(sgPLS)
                 library(R.utils)
                 library(caret)
                 
                 #Initialization
-                MSEP_vec = c()
-                R2_vec = c()
                 nb_var_vec = c()
                 name_var = c()
                 M=10
