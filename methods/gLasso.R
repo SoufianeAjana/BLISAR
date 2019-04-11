@@ -4,7 +4,7 @@
 #             Fonction Main resampling                           #
 ##################################################################
 
-#Important: First, the database should be shaped according to the sgPLS package recommendations, i.e. take into account the grouping structure of your database and transform it to a matrix !
+#Important: First, the database should be shaped according to the SGL package recommendations
 
 resampling_function = function(database,nb_iterations){
 
@@ -29,8 +29,7 @@ result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
   
                 library(SGL) 
                 library(R.utils)
-                MSEP_vec = c()
-                R2_vec = c()
+
                 nb_var_vec = c()
                 name_var = c()
                 M=10
