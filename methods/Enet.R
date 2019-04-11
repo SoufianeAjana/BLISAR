@@ -1,14 +1,19 @@
 
-#This script is used for running parallelized calculations of Elastic net regression model
+#This script is used for running parallelized calculations of sPLS regression model
 
 ##################################################################
-#                        Main Function                           #
+#             Fonction Main resampling                           #
 ##################################################################
+
+#Important: First, the database should be shaped according to the sgPLS package recommendations, i.e. take into account the grouping structure of your database and transform it to a matrix !
 
 resampling_function = function(database,nb_iterations){
+
+set.seed(1)  #We fix a seed for reproducibility matters
   
-library(foreach)                
-library(doParallel)             
+library(foreach)
+library(doParallel)
+library(doRNG)             
   
 #Initialization
 vec_list_var = c()
@@ -18,18 +23,15 @@ cl = makeCluster(detectCores())
 registerDoParallel(cl, cores = detectCores())       
   
 #################################################################
-#  Repeated double cross-validation function : result_sampling
+#  Repeated double cross-validation function : result_sampling 
 #################################################################
   
-result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
-    
-                set.seed(i+7)
+result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
+
                 library(glmnet)  # Package to fit lasso/elastic net models
                 library(R.utils)
                     
                 #Initialization
-                MSEP_vec = c()
-                R2_vec = c()
                 nb_var_vec = c()
                 name_var = c()
                 alpha_vec = c()
