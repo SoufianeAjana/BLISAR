@@ -1,29 +1,32 @@
-
 #This script is used for running parallelized calculations of gLasso regression model
 
 ##################################################################
 #             Fonction Main resampling                           #
 ##################################################################
 
+#Important: First, the database should be shaped according to the sgPLS package recommendations, i.e. take into account the grouping structure of your database and transform it to a matrix !
+
 resampling_function = function(database,nb_iterations){
+
+set.seed(1)  #We fix a seed for reproducibility matters
   
-library(foreach)               
-library(doParallel)             
+library(foreach)
+library(doParallel)
+library(doRNG)             
   
-#Initialisation
+#Initialization
 vec_list_var = c()
 vec_nb_var = c()
 index = c()
-cl = makeCluster(detectCores()-7)                   
-registerDoParallel(cl, cores = detectCores()-7)       
+cl = makeCluster(detectCores())                    
+registerDoParallel(cl, cores = detectCores())       
   
 #################################################################
-#  Repeated double cross-validation function : result_sampling
+#  Repeated double cross-validation function : result_sampling 
 #################################################################
   
-result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
-    
-                set.seed(i+7)
+result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
+  
                 library(SGL) 
                 library(R.utils)
                 MSEP_vec = c()
