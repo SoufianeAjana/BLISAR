@@ -1,44 +1,44 @@
-
-#This script is used for running parallelized calculations of Lasso regression model
+#This script is used for running parallelized calculations of sgLasso regression model
 
 ##################################################################
 #             Fonction Main resampling                           #
 ##################################################################
 
+#Important: First, the database should be shaped according to the SGL package recommendations
+
 resampling_function = function(database,nb_iterations){
+
+set.seed(1)  #We fix a seed for reproducibility matters
   
-library(foreach)              
-library(doParallel)           
-  
+library(foreach)
+library(doParallel)
+library(doRNG)             
   
 #Initialization
 vec_list_var = c()
 vec_nb_var = c()
 index = c()
-cl = makeCluster(detectCores())                   
-registerDoParallel(cl, cores = detectCores())     
+cl = makeCluster(detectCores())                    
+registerDoParallel(cl, cores = detectCores())       
   
 #################################################################
-#  Repeated double cross-validation function : result_sampling                                     
+#  Repeated double cross-validation function : result_sampling 
 #################################################################
   
-result_sampling  =  foreach(i=1:nb_iterations) %dopar% {
-    
-                set.seed(i+7)
+result_sampling  =  foreach(i=1:nb_iterations) %dorng% {
+  
                 library(SGL) 
                 library(R.utils)
                 library(psych)
                 
               
                 #Initialization
-                MSEP_vec = c()
-                R2_vec = c()
                 nb_var_vec = c()
                 name_var = c()
                 M=10
                 n = nrow(database)
                 MSEP.vec = Ypred =  rep(0,n)
-                folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples : sert à calculer l'erreur de prédiction moyenne au sein d'un même échantillon
+                folds = split(sample(1:n), rep(1:M, length = n))      # 10 fold CV samples 
                 alphas = seq(0.05, 0.95, by=.1)
                 grp = c(rep(1,length(grep("_EC", colnames(database)))),rep(2,length(grep("_PC", colnames(database)))),rep(3,length(grep("_pl", colnames(database)))),rep(4,length(grep("_GR", colnames(database)))),rep(5,length(grep("_lcms", colnames(database)))))
                 
